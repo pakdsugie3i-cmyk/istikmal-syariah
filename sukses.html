@@ -1,39 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Konfirmasi Istikmal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {font-family: Arial; background: linear-gradient(#00b09b, #96c93d); padding: 20px; color: #333;}
-    .form {max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
-    input {width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;}
-    button {background: #00b09b; color: white; padding: 15px; border: none; border-radius: 10px; font-size: 18px; width: 100%;}
-    h1 {text-align: center; color: white;}
-  </style>
-  <script src="leader.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sukses - 3IReborn</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <h1>🌙 Konfirmasi & Kirim</h1>
-  <div class="form">
-    <h2>Step 2: Kontak</h2>
-    <input type="text" id="hp" placeholder="No. HP / WhatsApp" required>
-    <button onclick="submitForm()">Kirim Pendaftaran</button>
+  <div class="container">
+    <div class="top">
+      <img src="assets/logo.png" alt="Logo Istikmal" class="logo" />
+      <h1>Selamat! 🌟<br><span class="sub">Pendaftaran Berhasil</span></h1>
+    </div>
+    <div class="card">
+      <h2>Terima Kasih Mitra Baru!</h2>
+      <p style="font-size:18px; text-align:center; color:#00b09b;">
+        Data mu udah masuk ke Leader terdekat! 🚀<br>
+        Leader bakal WA kamu sebentar lagi untuk closing.<br>
+        <strong>Tunggu 5 detik... otomatis redirect WA!</strong>
+      </p>
+
+      <div id="countdown" style="font-size:48px; font-weight:bold; color:#00b09b; text-align:center; margin:30px 0;">5</div>
+
+      <div style="text-align:center; margin:30px 0;">
+        <button class="btn primary" onclick="shareLink()">Bagikan Link Leader Mu 📲</button>
+      </div>
+
+      <div id="qrCode" style="text-align:center; margin:30px 0;"></div>
+
+      <div class="confirm-box">
+        <p>🎉 Confetti spesial buat mu! Leader siap bantu closing 100% syariah!</p>
+      </div>
+    </div>
+    <div class="foot">© 2025 3IReborn – MLM Syariah Digital</div>
   </div>
 
+  <script src="leader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
   <script>
-    function submitForm() {
-      const nama = localStorage.getItem('nama') || 'Calon Mitra';
-      const ktp = localStorage.getItem('ktp') || '-';
-      const tl = localStorage.getItem('tl') || '-';
-      const ibu = localStorage.getItem('ibu') || '-';
-      const hp = document.getElementById('hp').value;
-      const { waNumber, leaderName } = getLeaderInfo();
-      
-      const message = `Halo *${leaderName}*! 👋%0A%0ASaya *${nama}* mau daftar Istikmal Syariah bareng 3iReborn!%0A%0A📋 *Data Saya:*%0A- KTP: ${ktp}%0A- Tempat/Tgl Lahir: ${tl}%0A- Ibu Kandung: ${ibu}%0A- HP/WA: ${hp}%0A%0ATerima kasih, tunggu konfirmasi ya! 🌿`;
-      
-      alert(`Pendaftaran Berhasil!%0ADialihkan ke WA ${leaderName}...`);
-      window.location.href = `https://wa.me/${waNumber}?text=${message}`;
-      localStorage.clear();
+    // Confetti explosion
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#00b09b', '#ffd700', '#ffffff']
+    });
+
+    // Countdown redirect WA
+    let time = 5;
+    const countdown = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      time--;
+      countdown.textContent = time;
+      if (time <= 0) {
+        clearInterval(interval);
+        const params = new URLSearchParams(window.location.search);
+        const leader = params.get('leader') || 'default';
+        const waNumber = leaders[leader] || leaders.sugiarto;
+        window.location.href = `https://wa.me/${waNumber}`;
+      }
+    }, 1000);
+
+    // QR Code link leader
+    const params = new URLSearchParams(window.location.search);
+    const leaderParam = params.get('leader') ? '?leader=' + params.get('leader') : '';
+    const shareUrl = window.location.origin + window.location.pathname + leaderParam;
+    new QRCode(document.getElementById('qrCode'), {
+      text: shareUrl,
+      width: 200,
+      height: 200,
+      colorDark: "#00b09b",
+      colorLight: "#ffffff"
+    });
+
+    // Share link
+    function shareLink() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Link Leader 3IReborn',
+          text: 'Daftar Istikmal Syariah bareng aku!',
+          url: shareUrl
+        });
+      } else {
+        prompt('Copy link ini:', shareUrl);
+      }
     }
   </script>
 </body>
