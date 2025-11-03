@@ -12,81 +12,55 @@
   <div class="container">
     <div class="top">
       <img src="assets/logo.png" alt="Logo Istikmal" class="logo" />
-      <h1>Selamat! 🌟<br><span class="sub">Pendaftaran Berhasil</span></h1>
+      <h1>Terima Kasih Mitra Baru! 🌿</h1>
+      <p class="sub">Data lengkap + foto e-KTP udah langsung WA ke leader Anda.</p>
     </div>
     <div class="card">
-      <h2>Terima Kasih Mitra Baru!</h2>
-      <p style="font-size:18px; text-align:center; color:#00b09b;">
-        Data mu udah masuk ke Leader terdekat! 🚀<br>
-        Leader bakal WA kamu sebentar lagi untuk closing.<br>
-        <strong>Tunggu 5 detik... otomatis redirect WA!</strong>
-      </p>
-
-      <div id="countdown" style="font-size:48px; font-weight:bold; color:#00b09b; text-align:center; margin:30px 0;">5</div>
-
-      <div style="text-align:center; margin:30px 0;">
-        <button class="btn primary" onclick="shareLink()">Bagikan Link Leader Mu 📲</button>
+      <h2>Closing Dalam 1x24 Jam! 🚀</h2>
+      <div class="confirm-box" style="font-size:18px; padding:30px;">
+        ✅ <strong>Pendaftaran Sukses!</strong><br>
+        Leader akan hubungi Anda segera.<br>
+        Komisi & polis syariah segera diproses.<br><br>
+        <button class="btn primary" onclick="shareLink()">Bagikan Link Closing Mu 📲</button>
       </div>
-
-      <div id="qrCode" style="text-align:center; margin:30px 0;"></div>
-
-      <div class="confirm-box">
-        <p>🎉 Confetti spesial buat mu! Leader siap bantu closing 100% syariah!</p>
+      <div style="text-align:center; margin:30px 0;">
+        <canvas id="confetti"></canvas>
       </div>
     </div>
-    <div class="foot">© 2025 3IReborn – MLM Syariah Digital</div>
+    <div class="foot">© 2025 3IReborn – MLM Syariah Digital No.1</div>
   </div>
 
-  <script src="leader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
   <script>
-    // Confetti explosion
+    // Confetti disco nyala
     confetti({
-      particleCount: 150,
+      particleCount: 200,
       spread: 70,
       origin: { y: 0.6 },
       colors: ['#00b09b', '#ffd700', '#ffffff']
     });
 
-    // Countdown redirect WA
-    let time = 5;
-    const countdown = document.getElementById('countdown');
-    const interval = setInterval(() => {
-      time--;
-      countdown.textContent = time;
-      if (time <= 0) {
-        clearInterval(interval);
-        const params = new URLSearchParams(window.location.search);
-        const leader = params.get('leader') || 'default';
-        const waNumber = leaders[leader] || leaders.sugiarto;
-        window.location.href = `https://wa.me/${waNumber}`;
-      }
-    }, 1000);
-
-    // QR Code link leader
-    const params = new URLSearchParams(window.location.search);
-    const leaderParam = params.get('leader') ? '?leader=' + params.get('leader') : '';
-    const shareUrl = window.location.origin + window.location.pathname + leaderParam;
-    new QRCode(document.getElementById('qrCode'), {
-      text: shareUrl,
-      width: 200,
-      height: 200,
-      colorDark: "#00b09b",
-      colorLight: "#ffffff"
-    });
-
-    // Share link
+    // Share link leader
     function shareLink() {
+      const params = new URLSearchParams(window.location.search);
+      const leader = params.get('leader') || 'default';
+      const shareUrl = `https://3ireborn.github.io/istikmal-syariah/?leader=${leader}`;
       if (navigator.share) {
         navigator.share({
-          title: 'Link Leader 3IReborn',
-          text: 'Daftar Istikmal Syariah bareng aku!',
+          title: 'Daftar Istikmal Syariah bareng saya!',
+          text: 'Form digital super mudah + closing cepat!',
           url: shareUrl
         });
       } else {
-        prompt('Copy link ini:', shareUrl);
+        prompt('Copy link closing mu:', shareUrl);
       }
     }
+
+    // Auto back to home after 10s
+    setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      const leader = params.get('leader') ? '?leader=' + params.get('leader') : '';
+      window.location.href = "index.html" + leader;
+    }, 10000);
   </script>
 </body>
 </html>
