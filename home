@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Istikmal CMYK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {font-family: Arial; text-align: center; background: linear-gradient(#00b09b, #96c93d); margin: 0; padding: 50px; color: white;}
+    h1 {font-size: 40px; margin: 20px;}
+    .btn {display: block; margin: 30px auto; padding: 20px; font-size: 24px; width: 80%; background: white; color: #00b09b; border-radius: 15px; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold;}
+    .btn:hover {background: #eee;}
+    footer {margin-top: 50px; font-size: 14px;}
+  </style>
+</head>
+<body>
+  <h1>🌙 Istikmal CMYK</h1>
+  <p style="font-size:20px;">Pilih Menu Beb! 😘</p>
+  
+  <a href="https://pakdsugie3i-cmyk.github.io/istikmal-syariah/" class="btn">📝 Formulir Syariah</a>
+  
+  <a href="leader.html" class="btn">🏆 Leaderboard Game</a>
+  
+  <footer>Powered by GitHub Pages ❤️</footer>
+</body>
+</html>
