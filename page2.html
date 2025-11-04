@@ -18,7 +18,6 @@
       <h2>Halaman 2 – Data Tambahan</h2>
       <h3>Lengkapi Data & Kirim</h3>
 
-      <!-- e-KTP UPLOAD -->
       <h3>Upload Foto e-KTP 📸</h3>
       <label for="ktp">Foto KTP (wajib, max 5MB)</label>
       <input type="file" id="ktp" accept="image/*" required>
@@ -26,7 +25,7 @@
       <br>
 
       <label for="alamatDom">Alamat Domisili (jika berbeda)</label>
-      <input type="text" id="alamatDom" placeholder="Contoh: Jl. Sama dengan KTP" />
+      <input type="text" id="alamatDom" placeholder="Contoh: Sama dengan KTP" />
 
       <label for="pekerjaan">Pekerjaan</label>
       <input type="text" id="pekerjaan" placeholder="Contoh: Wiraswasta" required />
@@ -68,10 +67,7 @@
 
   <script src="leader.js"></script>
   <script>
-    // Ambil data Halaman 1
     const data1 = JSON.parse(localStorage.getItem('formData')) || {};
-
-    // Preview e-KTP
     let ktpBase64 = '';
     document.getElementById('ktp').addEventListener('change', function(e) {
       const file = e.target.files[0];
@@ -79,23 +75,18 @@
         const reader = new FileReader();
         reader.onload = function(ev) {
           ktpBase64 = ev.target.result;
-          const preview = document.getElementById('ktpPreview');
-          preview.innerHTML = `<img src="${ktpBase64}" alt="Preview KTP" style="max-width:100%; border-radius:15px; border:4px solid #00b09b; box-shadow:0 0 30px #00b09b;">`;
+          document.getElementById('ktpPreview').innerHTML = `<img src="${ktpBase64}" style="max-width:100%; border-radius:15px; border:4px solid #00b09b; box-shadow:0 0 30px #00b09b;">`;
         };
         reader.readAsDataURL(file);
-      } else {
-        alert('File terlalu besar atau bukan gambar!');
-      }
+      } else alert('File besar/bukan gambar!');
     });
 
-    // Tombol Kembali
     document.getElementById('backTo1').onclick = function() {
       const params = new URLSearchParams(window.location.search);
       const leader = params.get('leader') ? '?leader=' + params.get('leader') : '';
       window.location.href = "index.html" + leader;
     };
 
-    // Kirim ke WA (FIX NO BLOCK)
     document.getElementById('kirim').onclick = function() {
       const data2 = {
         alamatDom: document.getElementById('alamatDom').value,
@@ -108,38 +99,22 @@
         kesehatan: document.getElementById('kesehatan').value,
         ktp: ktpBase64
       };
-
-      if (!data2.ktp) {
-        alert('Upload foto e-KTP dulu ya!');
-        return;
-      }
+      if (!data2.ktp) return alert('Upload e-KTP dulu!');
 
       const fullData = { ...data1, ...data2 };
       const leader = new URLSearchParams(window.location.search).get('leader') || 'default';
       const waNumber = leaders[leader] || leaders.default;
 
       let msg = `Halo *${leader.toUpperCase()}*!%0A*MITRA BARU ISTIKMAL SYARIAH* 🌿%0A%0A`;
-      msg += `*Nama:* ${fullData.nama}%0A`;
-      msg += `*NIK:* ${fullData.nik}%0A`;
-      msg += `*HP:* ${fullData.hp}%0A`;
-      msg += `*Alamat KTP:* ${fullData.alamatKtp}%0A`;
-      msg += `*Domisili:* ${fullData.alamatDom || 'Sama'}%0A`;
-      msg += `*Pekerjaan:* ${fullData.pekerjaan}%0A`;
-      msg += `*Penghasilan:* ${fullData.penghasilan}%0A`;
-      msg += `*Ibu Kandung:* ${fullData.ibu}%0A`;
-      msg += `*Bank:* ${fullData.namaBank} - ${fullData.noRek}%0A`;
-      msg += `*Ahli Waris:* ${fullData.namaAhli} (${fullData.hubAhli})%0A`;
-      msg += `*Kesehatan:* ${fullData.kesehatan}%0A`;
-      msg += `%0A*e-KTP:* [Lihat Foto KTP](${fullData.ktp})%0A%0A`;
-      msg += `Mohon proses closing ya Leader! 🙏`;
+      msg += `*Nama:* ${fullData.nama}%0A*NIK:* ${fullData.nik}%0A*HP:* ${fullData.hp}%0A*Alamat KTP:* ${fullData.alamatKtp}%0A*Domisili:* ${fullData.alamatDom || 'Sama'}%0A*Pekerjaan:* ${fullData.pekerjaan}%0A*Penghasilan:* ${fullData.penghasilan}%0A*Ibu Kandung:* ${fullData.ibu}%0A*Bank:* ${fullData.namaBank} - ${fullData.noRek}%0A*Ahli Waris:* ${fullData.namaAhli} (${fullData.hubAhli})%0A*Kesehatan:* ${fullData.kesehatan}%0A%0A*e-KTP:* [Lihat Foto KTP](${fullData.ktp})%0A%0AMohon closing ya Leader! 🙏`;
 
-      // FIX BLOCK: Delay + tab focus
+      // FIX NO BLOCK: Delay 1.5 detik + focus tab
       setTimeout(() => {
         const waTab = window.open(`https://wa.me/${waNumber}?text=${msg}`, '_blank');
         if (waTab) waTab.focus();
-      }, 1000);
+        alert('DATA TERKIRIM KE WA LEADER! Cek tab baru – pesan full + e-KTP foto nyala!');
+      }, 1500);
 
-      alert('Sukses! WA leader terbuka di tab baru – cek ya!');
       window.location.href = "sukses.html";
     };
   </script>
